@@ -1,0 +1,42 @@
+modules:
+# - type: script
+#   snippets:
+#   - "mkdir -p /var/log/netbird"
+# - type: dnf
+#   repos:
+#     files:
+#       - netbird.repo
+#   install:
+#     packages:
+#       - repo: netbird
+#         packages:
+#         - netbird
+#         - netbird-ui
+
+- type: files
+  files:
+    - source: netbird.service
+      destination: /etc/systemd/system/netbird.service
+
+- type: script
+  snippets:
+  - |
+    # Fetch the latest release data
+    RELEASE_DATA=$(curl -s https://api.github.com/repos/netbirdio/netbird/releases/latest)
+    
+    # Extract the download URLs for both the daemon and the UI package
+    DAEMON_URL=$(echo "$RELEASE_DATA" | grep "browser_download_url" | grep "netbird_" | grep "linux_amd64.rpm" | cut -d '"' -f 4)    
+
+    # Download both RPMs
+    curl -Lo netbird.rpm "$DAEMON_URL"
+
+    # Install both directly via rpm to bypass the failing post-install scriptlets
+    rpm -ivh --noscripts netbird.rpm
+    
+    # Clean up
+    rm netbird.rpm
+
+- type: systemd
+  system:
+    enabled:
+      - netbird.service
