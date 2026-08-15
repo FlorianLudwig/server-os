@@ -17,4 +17,9 @@ modules:
   #     - install-amdgpu_top.sh
   - from-file: common/netbird.yml
 
+  - type: systemd
+    system:
+      masked:
+        - bluetooth.service
+
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
