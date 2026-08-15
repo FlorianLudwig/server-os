@@ -22,4 +22,10 @@ modules:
       masked:
         - bluetooth.service
 
+  - type: os-release
+    properties:
+      NAME: "Fedora Linux"
+      ID: fedora
+      PRETTY_NAME: "GR OS (based on Fedora 44)"
+
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
