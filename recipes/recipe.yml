@@ -17,6 +17,12 @@ modules:
   #     - install-amdgpu_top.sh
   - from-file: common/netbird.yml
 
+  # udisks is required for fwdup to work
+  - type: dnf
+    install:
+      packages:
+      - udisks2
+
   - type: systemd
     system:
       masked:
